@@ -1,0 +1,112 @@
+<div class="container" *ngIf="addressForms$ | async as addressesForm">
+  <button class="btn" (click)="addAddress()" [disabled]="addressesForm.invalid">
+    Add
+  </button>
+  <div>
+    <form
+      *ngFor="let address of addressesForm.controls"
+      [formGroup]="address"
+      (ngSubmit)="saveAddress(address.value)"
+    >
+      <input type="hidden" formControlName="id" />
+      <label for="street">
+        <span>Street:</span>
+        <input type="text" formControlName="street" />
+        <ng-container
+          [ngTemplateOutlet]="commonErrors"
+          [ngTemplateOutletContext]="{
+            ctrl: f(address, 'street'),
+            name: 'Street'
+          }"
+        >
+        </ng-container>
+      </label>
+      <label for="city">
+        <span>City:</span>
+        <input type="text" formControlName="city" />
+        <ng-container
+          [ngTemplateOutlet]="commonErrors"
+          [ngTemplateOutletContext]="{ ctrl: ctrl, name: 'City' }"
+        >
+        </ng-container>
+      </label>
+      <label for="district">
+        <span>District:</span>
+        <input type="text" formControlName="district" />
+        <ng-container
+          [ngTemplateOutlet]="commonErrors"
+          [ngTemplateOutletContext]="{
+            ctrl: f(address, 'district'),
+            name: 'District'
+          }"
+        >
+        </ng-container>
+      </label>
+      <label for="postalCode">
+        <span>Postal Code:</span>
+        <input type="text" formControlName="postalCode" />
+        <ng-container
+          [ngTemplateOutlet]="commonErrors"
+          [ngTemplateOutletContext]="{
+            ctrl: f(address, 'postalCode'),
+            name: 'Postal Code'
+          }"
+        >
+        </ng-container>
+      </label>
+      <label for="state">
+        <span>State:</span>
+        <input type="text" formControlName="state" />
+        <ng-container
+          [ngTemplateOutlet]="commonErrors"
+          [ngTemplateOutletContext]="{
+            ctrl: f(address, 'state'),
+            name: 'State'
+          }"
+        >
+        </ng-container>
+      </label>
+      <label for="country">
+        <span>Country:</span>
+        <input type="text" formControlName="country" />
+        <ng-container
+          [ngTemplateOutlet]="commonErrors"
+          [ngTemplateOutletContext]="{
+            ctrl: f(address, 'country'),
+            name: 'Country'
+          }"
+        >
+        </ng-container>
+      </label>
+      <button class="btn" type="submit" [disabled]="address.invalid">
+        Save
+      </button>
+      <button
+        class="btn"
+        type="button"
+        (click)="deleteAddress(address.value.id)"
+      >
+        Delete
+      </button>
+      <span>{{ address.value | json }}}</span>
+    </form>
+  </div>
+</div>
+
+<ng-template #commonErrors let-control="ctrl" let-fieldName="name">
+  <span
+    class="inline-error"
+    *ngIf="control && control.invalid && control.dirty"
+  >
+    <p *ngIf="control.errors.required">{{ fieldName }} is required</p>
+    <p *ngIf="control.errors.minlength">
+      {{ fieldName }} must be greater than
+      {{ control.errors.minlength.requiredLength }} characters.
+    </p>
+    <p *ngIf="control.errors.maxlength">
+      {{ fieldName }} must be less than
+      {{ control.errors.maxlength.requiredLength }} characters.
+    </p>
+    <p *ngIf="control.errors.pattern">{{ fieldName }} is not valid.</p>
+  </span>
+</ng-template>
